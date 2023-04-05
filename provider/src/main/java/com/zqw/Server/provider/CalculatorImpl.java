@@ -1,7 +1,7 @@
 package com.zqw.Server.provider;
 
 import com.zqw.Calculator;
-import com.zqw.common.annotation.Provider;
+import com.zqw.Server.annotation.Provider;
 
 
 @Provider

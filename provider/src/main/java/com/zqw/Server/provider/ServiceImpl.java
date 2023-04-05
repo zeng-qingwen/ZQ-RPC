@@ -2,11 +2,11 @@ package com.zqw.Server.provider;
 
 
 
-import com.zqw.Service;
-import com.zqw.common.annotation.Provider;
+import com.zqw.HelloService;
+import com.zqw.Server.annotation.Provider;
 
 @Provider
-public class ServiceImpl implements Service {
+public class ServiceImpl implements HelloService {
     @Override
     public String hello(String str) {
         return "hello "+str;

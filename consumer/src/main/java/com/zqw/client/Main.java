@@ -1,5 +1,6 @@
 package com.zqw.client;
 
+import com.zqw.client.test.TestUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -9,8 +10,9 @@ public class Main {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Main.class);
-        TestUtils bean = context.getBean(TestUtils.class);
-        bean.dealWithRpc();
+        TestUtils testUtils = context.getBean(TestUtils.class);
+        testUtils.testFunc();
+        context.close();
     }
 
 }

@@ -1,10 +1,10 @@
-package com.zqw.client;
+package com.zqw.client.rpcConsumer;
 
 
 import com.zqw.common.message.Message;
 import com.zqw.common.message.RpcResponseMessage;
 import com.zqw.common.message.StringsMessage;
-import com.zqw.common.session.RpcSession;
+import com.zqw.client.rpcConsumer.session.RpcSession;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

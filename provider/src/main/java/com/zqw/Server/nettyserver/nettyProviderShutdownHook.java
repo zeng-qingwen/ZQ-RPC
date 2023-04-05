@@ -13,13 +13,10 @@ import org.springframework.stereotype.Component;
 public class nettyProviderShutdownHook implements ApplicationListener<ContextClosedEvent> {
     @Autowired
     CuratorFramework curatorFramework;
-
     @Autowired
     NioEventLoopGroup boss;
-
     @Autowired
     NioEventLoopGroup worker;
-
     @Autowired
     Channel channel;
 

@@ -1,9 +1,9 @@
-package com.zqw.common.proxy;
+package com.zqw.client.rpcConsumer.proxy;
 
 
 import com.zqw.common.message.RpcRequestMessage;
 import com.zqw.common.message.RpcResponseMessage;
-import com.zqw.common.session.RpcSession;
+import com.zqw.client.rpcConsumer.session.RpcSession;
 import io.netty.channel.Channel;
 import org.springframework.util.Assert;
 

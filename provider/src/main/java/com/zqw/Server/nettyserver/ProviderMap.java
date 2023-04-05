@@ -1,6 +1,6 @@
 package com.zqw.Server.nettyserver;
 
-import com.zqw.common.annotation.Provider;
+import com.zqw.Server.annotation.Provider;
 import com.zqw.common.serial.Serializer;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.data.Stat;
@@ -43,10 +43,6 @@ public class ProviderMap implements BeanFactoryAware {
 
     public  Object getInstance(String key){
         return providerMap.get(key);
-    }
-
-    public <T> T getInstance(String key,Class<T> tClass){
-        return (T)getInstance(key);
     }
 
     @Override

@@ -1,9 +1,9 @@
-package com.zqw.client;
+package com.zqw.client.rpcConsumer;
 
 import com.zqw.common.codec.MessageCodec;
 import com.zqw.common.message.StringMessage;
-import com.zqw.common.proxy.JDKProxyBuilder;
-import com.zqw.common.session.RpcSession;
+import com.zqw.client.rpcConsumer.proxy.JDKProxyBuilder;
+import com.zqw.client.rpcConsumer.session.RpcSession;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -19,7 +19,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 
@@ -30,7 +33,15 @@ public class consumerConfiguration implements BeanFactoryPostProcessor {
 
     @Bean
     public InetSocketAddress remoteAddress(){
-        return new InetSocketAddress("192.168.43.149", 8081);
+        InetAddress localHost = null;
+        String hostAddress = "";
+        try {
+            localHost = Inet4Address.getLocalHost();
+            hostAddress = localHost.getHostAddress();
+        } catch (UnknownHostException e) {
+            System.out.println(e.getCause().getMessage());
+        }
+        return new InetSocketAddress(hostAddress, 9095);
     }
 
     @Bean
@@ -53,9 +64,7 @@ public class consumerConfiguration implements BeanFactoryPostProcessor {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel channel) throws Exception {
-
                         channel.pipeline().addLast(messageCodec);
-
                         channel.pipeline().addLast(clientHandler);
                     }
                 });
@@ -87,7 +96,10 @@ public class consumerConfiguration implements BeanFactoryPostProcessor {
          }
 
         try {
+            // 建立TCP Channel长连接
             Channel channel = bootstrap.connect(remoteAddress).sync().channel();
+
+            // 向微服务提供者发送消息，新的consumer已经建立连接了,获取微服务提者实现的业务代码接口
             CountDownLatch countDownLatch = new CountDownLatch(1);
             int serialId = rpcSession.getSerialId();
             StringMessage msg = new StringMessage("onLine");
@@ -95,13 +107,17 @@ public class consumerConfiguration implements BeanFactoryPostProcessor {
             channel.writeAndFlush(msg);
             rpcSession.addWait(serialId,countDownLatch);
             countDownLatch.await();
-
+            JDKProxyBuilder jdkProxyBuilder = new JDKProxyBuilder(channel, rpcSession);
             String[] arr = (String[])rpcSession.getResult(serialId);
+
             for (String s : arr) {
                 try {
                     Class<?> aClass = Class.forName(s);
                     System.out.println("注入了-->"+aClass+"  实例");
-                    defaultListableBeanFactory.registerSingleton(aClass.getSimpleName().toLowerCase(Locale.ROOT),new JDKProxyBuilder(channel,rpcSession).getInstance(aClass));
+                    // JDK动态代理生成业务接口的代理类，并注入到IOC容器中
+                    assert defaultListableBeanFactory != null;
+                    Object JDKInstance = jdkProxyBuilder.getInstance(aClass);
+                    defaultListableBeanFactory.registerSingleton(aClass.getSimpleName().toLowerCase(Locale.ROOT), JDKInstance);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }

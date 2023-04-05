@@ -2,7 +2,7 @@ package com.zqw.Server.provider;
 
 
 import com.zqw.Car;
-import com.zqw.common.annotation.Provider;
+import com.zqw.Server.annotation.Provider;
 
 @Provider
 public class CarImpl implements Car {

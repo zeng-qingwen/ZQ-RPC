@@ -27,11 +27,10 @@ public class Server {
                             channel.pipeline().addLast(new MessageCodec());
                             channel.pipeline().addLast(serverHandler);
                         }
-                    }).bind(8081)
+                    }).bind(9095)
                     .sync()
                     .channel();
             return channel;
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

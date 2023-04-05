@@ -1,4 +1,4 @@
-package com.zqw.client;
+package com.zqw.client.rpcConsumer;
 
 import io.netty.channel.Channel;
 import io.netty.channel.nio.NioEventLoopGroup;

@@ -1,5 +1,8 @@
 package com.zqw;
 
-public interface Service {
+public interface HelloService {
+
     String hello(String str);
+
+
 }

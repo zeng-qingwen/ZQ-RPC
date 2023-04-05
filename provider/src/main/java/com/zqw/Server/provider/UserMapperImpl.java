@@ -2,7 +2,7 @@ package com.zqw.Server.provider;
 
 
 import com.zqw.UserMapper;
-import com.zqw.common.annotation.Provider;
+import com.zqw.Server.annotation.Provider;
 
 @Provider
 public class UserMapperImpl implements UserMapper {
